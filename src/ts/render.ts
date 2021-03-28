@@ -75,11 +75,7 @@ const components = {
         </span>
     `,
 
-    change: (change: Diff): string => {
-        
-        console.log(change);
-
-        return `
+    change: (change: Diff): string => `
         <tr>
             <td class="property">
                 ${change.property}
@@ -88,7 +84,7 @@ const components = {
             <td class="old-value">${change.old ? prettify(change.old) : ''}</td>
             <td class="new-value">${prettify(change.new)}</td>
         </tr>
-    `},
+    `,
 
     action: (action: Action): string => `
         <li class="${action.type}">
@@ -135,23 +131,35 @@ const components = {
 };
 
 function prettify(value: string): string {
+    const typeOf = typeof value;
+    const friendyValue = typeOf != 'string' ? JSON.stringify(value) : value;
 
-    if (value === '<computed>')
-    {
-        return `<em>&lt;computed&gt;</em>`;
+    try {
+
+
+
+        if (friendyValue === '<computed>')
+        {
+            return `<em>&lt;computed&gt;</em>`;
+        }
+        else if (friendyValue.startsWith('${') && friendyValue.endsWith('}'))
+        {
+            return `<em>${friendyValue}</em>`;
+        }
+        else if (friendyValue.indexOf('\\n') >= 0 || friendyValue.indexOf('\\"') >= 0) {
+            var sanitisedValue = friendyValue.replace(new RegExp('\\\\n', 'g'), '\n')
+                                    .replace(new RegExp('\\\\"', 'g'), '"');
+            
+            return `<pre>${prettifyJson(sanitisedValue)}</pre>`;
+        }
+        else {
+            return `<pre>${prettifyJson(friendyValue)}</pre>`;
+        }
     }
-    else if (value.startsWith('${') && value.endsWith('}'))
-    {
-        return `<em>${value}</em>`;
-    }
-    else if (value.indexOf('\\n') >= 0 || value.indexOf('\\"') >= 0) {
-        var sanitisedValue = value.replace(new RegExp('\\\\n', 'g'), '\n')
-                                  .replace(new RegExp('\\\\"', 'g'), '"');
-        
-        return `<pre>${prettifyJson(sanitisedValue)}</pre>`;
-    }
-    else {
-        return value;
+    catch (e) {
+        console.log("startswith error", e);
+        console.log(typeOf, value);
+        return "error"
     }
 }
 

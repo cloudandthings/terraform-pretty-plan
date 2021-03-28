@@ -1,4 +1,68 @@
-import * as diff from "../../node_modules/jest-diff/build/index";
+function equal(a: any, b: any): boolean {
+    if (a === b) return true;
+  
+    if (a && b && typeof a == 'object' && typeof b == 'object') {
+      if (a.constructor !== b.constructor) return false;
+  
+      var length, i, keys;
+      if (Array.isArray(a)) {
+        length = a.length;
+        if (length != b.length) return false;
+        for (i = length; i-- !== 0;)
+          if (!equal(a[i], b[i])) return false;
+        return true;
+      }
+  
+  
+      if ((a instanceof Map) && (b instanceof Map)) {
+        if (a.size !== b.size) return false;
+        for (i of a.entries())
+          if (!b.has(i[0])) return false;
+        for (i of a.entries())
+          if (!equal(i[1], b.get(i[0]))) return false;
+        return true;
+      }
+  
+      if ((a instanceof Set) && (b instanceof Set)) {
+        if (a.size !== b.size) return false;
+        for (i of a.entries())
+          if (!b.has(i[0])) return false;
+        return true;
+      }
+  
+      if (ArrayBuffer.isView(a) && ArrayBuffer.isView(b)) {
+        length = a.byteLength;
+        if (length != b.byteLength) return false;
+        for (i = length; i-- !== 0;)
+          if (a[i] !== b[i]) return false;
+        return true;
+      }
+  
+  
+      if (a.constructor === RegExp) return a.source === b.source && a.flags === b.flags;
+      if (a.valueOf !== Object.prototype.valueOf) return a.valueOf() === b.valueOf();
+      if (a.toString !== Object.prototype.toString) return a.toString() === b.toString();
+  
+      keys = Object.keys(a);
+      length = keys.length;
+      if (length !== Object.keys(b).length) return false;
+  
+      for (i = length; i-- !== 0;)
+        if (!Object.prototype.hasOwnProperty.call(b, keys[i])) return false;
+  
+      for (i = length; i-- !== 0;) {
+        var key = keys[i];
+  
+        if (!equal(a[key], b[key])) return false;
+      }
+  
+      return true;
+    }
+  
+    // true if both NaN, false otherwise
+    return a!==a && b!==b;
+  };
+
 
 export interface RawResource {
     address: string;
@@ -55,10 +119,12 @@ export interface Plan {
 
 export function parse(terraformPlan: string): Plan {
 
-    var planJson = JSON.parse(terraformPlan);
+    var planJson = JSON.parse(terraformPlan.trim());
     var resourceChanges = planJson.resource_changes;
 
-    let actions: Action[] = resourceChanges.map( resource => {
+    let removeNop = resourceChanges.filter(resource => !resource.change.actions.includes("no-op"));
+
+    let actions: Action[] = removeNop.map( resource => {
         let id:ResourceId = parseId(resource);
 
         let type:ChangeType = parseChangeType(resource.change.actions);
@@ -97,45 +163,28 @@ export function parseId(resource: RawResource): ResourceId {
 
 export function parseChanges(changes: RawChanges): Diff[] {
 
-    let props = {};
+    let propsBefore = changes.before ? Object.keys(changes.before) : [];
+    let propsAfter = changes.after ? Object.keys(changes.after) : [];
+    let propsAfterUnknown = changes.after ? Object.keys(changes.after_unknown) : [];
 
-    if (changes.before) {
-        for (const prop in changes.before) {
-            
-            if (!props[prop]) {
-                props[prop] = {property:prop, old:""}
-            }
+    let propsAllObj =  propsBefore.concat(propsAfter).concat(propsAfterUnknown).reduce( (acc, property) => {
+        acc[property] = {property, old: null, new: null, forcesNewResource: ""};
+        return acc;
+    }, {});
 
-            props[prop].old = changes.before[prop];
-        }
-    }
+    const propsAllArr = Object.keys(propsAllObj).map((key) => propsAllObj[key]);
 
-    if (changes.after) {
-        for (const prop in changes.after) {
-            
-            if (!changes.after[prop]) {
-                continue;
-            }
+    let props = propsAllArr.reduce((acc, property) => {
 
-            if (!props[prop]) {
-                props[prop] = {property:prop, new: ""}
-            }
+        property.old = changes.before ? ( changes.before[property.property] ? changes.before[property.property] : null) : null;
+        property.new = changes.after ? ( changes.after[property.property] ? changes.after[property.property] : null) : null;
+        property.new = changes.after_unknown ? ( property.new ? property.new : ( changes.after_unknown[property.property] ? '<computed>' : property.new ) ) : property.new;
 
-            props[prop].new = changes.after[prop];
-        }
-    }
+        if (!equal(property.old,property.new)) acc.push(property);
 
-    if (changes.after_unknown) {
-        for (const prop in changes.after_unknown) {
-            
-            if (!props[prop]) {
-                props[prop] = {property:prop, new: ""}
-            }
+        return acc;
 
-            props[prop].new = changes.after_unknown[prop] ? '<computed>': null;
-        }
-    }
+    }, []);
 
-
-    return Object.keys(props).map((key) => props[key]);
+    return props;
 }

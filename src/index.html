@@ -12,18 +12,14 @@
     <div class="stripe"></div>
     <div id="release-notification" class="hidden"></div>
     <div id="branding">
-        Source on <a href="https://github.com/chrislewisdev/prettyplan">GitHub</a><br />
-        By <a href="https://twitter.com/chrislewisdev">Chris Lewis</a><br />
+        Source on <a href="https://github.com/cloudandthings/gocd-terraform-pretty-plan">GitHub</a><br />
+        By <a href="https://cloudandthings.io">cloudandthings.io</a><br />
         <button class="text-button" onclick="showReleaseNotes()">Release Notes</button><br />
-        <a href="https://github.com/chrislewisdev/prettyplan-cli">CLI version</a><br />
    </div>
     <div class="container">
-        <h1>prettyplan</h1>
-        <p>Just paste in your output from terraform plan (or use the provided example), and hit Prettify!</p>
-        <p>Prettyplan does not support plans from Terraform 0.12+. For more info, <a href="https://github.com/chrislewisdev/prettyplan">see the project's readme</a>.</p>
-        <textarea id="terraform-plan">
-            {"format_version":"0.1","terraform_version":"0.13.0","planned_values":{"root_module":{"resources":[{"address":"aws_ssm_parameter.foo","mode":"managed","type":"aws_ssm_parameter","name":"foo","provider_name":"registry.terraform.io/hashicorp/aws","schema_version":0,"values":{"allowed_pattern":null,"description":null,"name":"foo","overwrite":null,"tags":null,"tier":"Standard","type":"String","value":"bar"}}]}},"resource_changes":[{"address":"aws_ssm_parameter.foo","mode":"managed","type":"aws_ssm_parameter","name":"foo","provider_name":"registry.terraform.io/hashicorp/aws","change":{"actions":["create"],"before":null,"after":{"allowed_pattern":null,"description":null,"name":"foo","overwrite":null,"tags":null,"tier":"Standard","type":"String","value":"bar"},"after_unknown":{"arn":true,"data_type":true,"id":true,"key_id":true,"version":true}}}],"configuration":{"provider_config":{"aws":{"name":"aws","expressions":{"region":{"constant_value":"af-south-1"}}}},"root_module":{"resources":[{"address":"aws_ssm_parameter.foo","mode":"managed","type":"aws_ssm_parameter","name":"foo","provider_config_key":"aws","expressions":{"name":{"constant_value":"foo"},"type":{"constant_value":"String"},"value":{"constant_value":"bar"}},"schema_version":0}]}}}
-                                        </textarea><br />
+        <h1>terraform pretty plan</h1>
+        <p>Just paste in your output from terraform plan json, and hit Prettify!</p>
+        <textarea id="terraform-plan"></textarea><br />
         <button onclick="runPrettyplan()">Prettify it!</button>
         <div id="parsing-error-message" class="hidden">That doesn't look like a Terraform plan. Did you copy the entire output
             (without colouring) from the plan command?</div>
