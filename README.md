@@ -1,3 +1,29 @@
+# gocd-terraform-pretty-plan
+
+## Project setup
+```
+npm install
+```
+
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
+
+### Compiles and minifies for production
+```
+npm run build
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
+
+
 # prettyplan [![Build Status](https://travis-ci.com/chrislewisdev/prettyplan.svg?branch=master)](https://travis-ci.com/chrislewisdev/prettyplan)
 
 Prettyplan ([available online here](https://prettyplan.chrislewisdev.com/)) is a small tool to help you view large Terraform plans with ease. By pasting in your plan output, it will be formatted for:

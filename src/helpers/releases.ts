@@ -7,14 +7,6 @@ export function getCurrentVersion(): string {
     return releases[0].version;
 }
 
-export function getLastUsedVersion(): string {
-    return window.localStorage.getItem('lastUsedVersion');
-}
-
-export function updateLastUsedVersion(): void {
-    window.localStorage.setItem('lastUsedVersion', getCurrentVersion());
-}
-
 export function getReleases(): Release[] {
     return releases;
 }

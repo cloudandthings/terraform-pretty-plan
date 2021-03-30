@@ -1,28 +1,49 @@
 {
-  "name": "prettyplan",
-  "version": "1.0.0",
-  "description": "Formatting tool for terraform plan output",
-  "author": "Chris Lewis",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/chrislewisdev/prettyplan"
-  },
+  "name": "gocd-terraform-pretty-plan",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "test": "jest",
-    "build": "webpack",
-    "serve": "webpack-dev-server --open"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "core-js": "^3.6.5",
+    "vue": "^2.6.11",
+    "vue-json-compare": "^3.0.0"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.0",
-    "copy-webpack-plugin": "^4.6.0",
-    "html-webpack-plugin": "^3.2.0",
-    "jest": "^23.6.0",
-    "ts-jest": "^23.10.5",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.2.3",
-    "webpack-dev-server": "^3.1.14"
-  }
+    "@typescript-eslint/eslint-plugin": "^4.18.0",
+    "@typescript-eslint/parser": "^4.18.0",
+    "@vue/cli-plugin-babel": "~4.5.0",
+    "@vue/cli-plugin-eslint": "~4.5.0",
+    "@vue/cli-plugin-typescript": "^4.5.12",
+    "@vue/cli-service": "~4.5.0",
+    "@vue/eslint-config-typescript": "^7.0.0",
+    "babel-eslint": "^10.1.0",
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2",
+    "typescript": "~4.1.5",
+    "vue-template-compiler": "^2.6.11"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended",
+      "@vue/typescript"
+    ],
+    "parserOptions": {
+      "parser": "@typescript-eslint/parser"
+    },
+    "rules": {}
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
