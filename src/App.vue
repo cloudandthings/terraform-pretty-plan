@@ -4,9 +4,9 @@
     <div id="release-notification" class="hidden"></div>
     <PrettyPlan msg="Welcome to Your Vue.js + TypeScript App"/>
     <div id="branding">
-        Source on <a href="https://github.com/cloudandthings/gocd-terraform-pretty-plan">GitHub</a><br />
-        By <a href="https://cloudandthings.io">cloudandthings.io</a><br />
-        <button class="text-button" onclick="showReleaseNotes()">Release Notes</button><br />
+        <!-- Source on <a href="https://github.com/cloudandthings/gocd-terraform-pretty-plan">GitHub</a><br /> -->
+        <!-- By <a href="https://cloudandthings.io">cloudandthings.io</a><br /> -->
+        <!-- <button class="text-button" onclick="showReleaseNotes()">Release Notes</button><br /> -->
    </div>
   </div>
 </template>
