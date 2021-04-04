@@ -3,17 +3,14 @@
     <div class="stripe"></div>
     <div id="release-notification" class="hidden"></div>
     <div class="container">
-      <h1>terraform pretty plan</h1>
-      <p>
-        Some blurb here
-      </p>
     <PrettyPlan/>
     </div>
-    <div id="branding">
+    <footer id="branding">
         Source on <a href="https://github.com/cloudandthings/terraform-pretty-plan">GitHub</a><br />
         By <a target="_blank" href="https://cloudandthings.io">cloudandthings.io</a><br />
         <!-- <button class="text-button" onclick="showReleaseNotes()">Release Notes</button><br /> -->
-   </div>
+   </footer>
+
   </div>
 </template>
 
@@ -146,6 +143,7 @@ export default Vue.extend({
   }
 
   #branding {
+
       float: right;
       padding-top: 10px;
       padding-right: 10px;
@@ -284,4 +282,6 @@ export default Vue.extend({
 .col-10 {width: 83.33%;}
 .col-11 {width: 91.66%;}
 .col-12 {width: 100%;}
+
+
 </style>

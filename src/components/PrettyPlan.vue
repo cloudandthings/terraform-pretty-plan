@@ -1,6 +1,8 @@
 <template>
   <div>
     <div v-if="noAutoPlanFound">
+        <PrettyPlanWelcome/>
+
       <textarea
         id="terraform-plan"
         spellcheck="false"
@@ -26,73 +28,45 @@
       >
         Collapse all
       </button>
-      <br /><br />
-      <input
-        type="checkbox"
-        id="Update"
-        value="update"
-        v-model="checkedActions"
-      />
-      <label for="Update">Update</label>
-      <input
-        type="checkbox"
-        id="Create"
-        value="create"
-        v-model="checkedActions"
-      />
-      <label for="Create">Create</label>
-      <input
-        type="checkbox"
-        id="Destroy"
-        value="destroy"
-        v-model="checkedActions"
-      />
-      <label for="Destroy">Destroy</label>
-      <input
-        type="checkbox"
-        id="Recreate"
-        value="recreate"
-        v-model="checkedActions"
-      />
-      <label for="Recreate">Recreate</label>
-      <input type="checkbox" id="Read" value="read" v-model="checkedActions" />
-      <label for="Read">Read</label>
 
       <div class="row">
-        <div class="col-6">
-          <p>Hide changes to the following props:</p>
-          <span v-for="prop in topProps" :key="'ignore_' + prop.name">
-            <input
-              type="checkbox"
-              :id="'ignore_' + prop.name"
-              :value="prop.name"
-              v-model="ignoredProps"
-            />
-            <label :for="'ignore_' + prop.name">{{ prop.name }}</label>
+        <div class="col-4">
+          <p>Show changes causing these actions:</p>
+          <span v-for="action in availableActions" :key="action">
+            <label class="chkcontainer">{{action}}
+              <input type="checkbox" :id="action" :value="action" v-model="checkedActions">
+              <span class="checkmark"></span>
+            </label>
           </span>
         </div>
-        <div class="col-6">
-          <p>Only show changes to the following props:</p>
+        <div class="col-4">
+          <p>Hide changes to these props:</p>
+          <span v-for="prop in topProps" :key="'ignore_' + prop.name">
+
+            <label class="chkcontainer">{{prop.name}}
+              <input type="checkbox" :id="'ignore_' + prop.name" :value="prop.name" v-model="ignoredProps">
+              <span class="checkmark"></span>
+            </label>
+
+          </span>
+        </div>
+        <div class="col-4">
+          <p>Only show changes to these props:</p>
           <span v-for="prop in topProps" :key="'include_' + prop.name">
-            <input
-              type="checkbox"
-              :id="'include_' + prop.name"
-              :value="prop.name"
-              v-model="includeOnlyProps"
-            />
-            <label :for="'include_' + prop.name">{{ prop.name }}</label>
+            
+            <label class="chkcontainer">{{prop.name}}
+              <input type="checkbox" :id="'include_' + prop.name" :value="prop.name" v-model="includeOnlyProps">
+              <span class="checkmark"></span>
+            </label>
           </span>
         </div>
       </div>
 
+            <label class="chkcontainer">FancyView
+              <input type="checkbox" id="FancyView" value="fancyView" v-model="fancyView">
+              <span class="checkmark"></span>
+            </label>
 
-      <input
-        type="checkbox"
-        id="FancyView"
-        value="fancyView"
-        v-model="fancyView"
-      />
-      <label for="FancyView">FancyView</label>
 
       <PrettyPlanActions :actions="filtered" :fancyView="fancyView" />
     </div>
@@ -102,6 +76,7 @@
 <script lang="js">
 import Vue from "vue";
 import PrettyPlanActions from './PrettyPlan.Actions.vue';
+import PrettyPlanWelcome from './PrettyPlan.Welcome.vue';
 
 import { parse } from "../helpers/parse";
 // import { Action, Warning } from "../helpers/interfaces";
@@ -110,7 +85,8 @@ import { parse } from "../helpers/parse";
 export default Vue.extend({
   name: "PrettyPlan",
   components: {
-    PrettyPlanActions
+    PrettyPlanActions,
+    PrettyPlanWelcome
   },
   data() {
     let actions = [];
@@ -121,6 +97,7 @@ export default Vue.extend({
       parsingError: false,
       actions,
       allVisible: false,
+      availableActions: ["update", "create", "destroy", "recreate", "read"],
       checkedActions: ["update", "create", "destroy", "recreate", "read"],
       fancyView:[],
       ignoredProps:[],
@@ -150,7 +127,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    fetch("plan.json")
+    fetch("pplan.json")
       .then((response) => response.json())
       .then((data) => this.parseRawJson(data))
       .catch((response) => {
@@ -212,3 +189,81 @@ export default Vue.extend({
   },
 });
 </script>
+
+<style scoped>
+label {
+  color:#000
+}
+
+/* The container */
+.chkcontainer {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 15px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color:#000000c0
+}
+
+/* Hide the browser's default checkbox */
+.container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+/* .container:hover input ~ .checkmark {
+  background-color: #ccc;
+} */
+
+/* When the checkbox is checked, add a blue background */
+.container input:checked ~ .checkmark {
+  background-color: #5C4CE4;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.container .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+
+
+</style>

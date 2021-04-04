@@ -142,6 +142,7 @@ export default Vue.extend({
   pre {
       white-space: pre-wrap;
   }
+  
   .changes table td.property {
       width: 20%;
       text-align: right;
