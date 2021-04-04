@@ -70,11 +70,6 @@ export function parseChanges(changes: RawChanges): Diff[] {
         property.new = changes.after_unknown ? ( changes.after_unknown[property.property] !== undefined ? "<computed>" : null) : null;
         property.new = changes.after ? ( changes.after[property.property] !== undefined ? changes.after[property.property] : property.new) : null;
 
-        if (property.property === "kms_key_id") {
-            console.log(property)
-            console.log(changes)
-        }
-
         if (!equal(property.old,property.new)) acc.push(property);
 
         return acc;

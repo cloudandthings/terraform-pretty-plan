@@ -1,5 +1,5 @@
 {
-  "name": "gocd-terraform-pretty-plan",
+  "name": "terraform-pretty-plan",
   "version": "0.1.0",
   "private": true,
   "scripts": {
