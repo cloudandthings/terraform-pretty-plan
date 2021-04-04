@@ -2,7 +2,13 @@
   <div id="app">
     <div class="stripe"></div>
     <div id="release-notification" class="hidden"></div>
-    <PrettyPlan msg="Welcome to Your Vue.js + TypeScript App"/>
+    <div class="container">
+      <h1>terraform pretty plan</h1>
+      <p>
+        Some blurb here
+      </p>
+    <PrettyPlan/>
+    </div>
     <div id="branding">
         <!-- Source on <a href="https://github.com/cloudandthings/gocd-terraform-pretty-plan">GitHub</a><br /> -->
         <!-- By <a href="https://cloudandthings.io">cloudandthings.io</a><br /> -->
@@ -300,6 +306,10 @@ export default Vue.extend({
   }
   .id-segment.name, .id-segment.type {
       font-weight: bold;
+  }
+  .id-segment.index {
+      font-weight: bold;
+      color:  #757575;
   }
 
   .change-count {

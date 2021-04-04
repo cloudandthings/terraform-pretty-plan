@@ -19,8 +19,6 @@ export function parse(terraformPlan: any): Plan {
 
     const plan = { warnings: [], actions };
 
-    console.log(plan)
-
     return plan;
 }
 
@@ -43,17 +41,23 @@ export function parseId(resource: RawResource): ResourceId {
     const idSegments = resource.address.split('.');
     const resourcePrefixes = idSegments.slice(0, idSegments.length - 2);
 
-    return { name: resource.name, type: resource.type, prefixes: resourcePrefixes };
+    return { 
+        name: resource.name, 
+        type: resource.type, 
+        prefixes: resourcePrefixes,
+        address: resource.address,
+        index: String(resource.index) === "undefined" ? null : String(resource.index)
+    };
 }
 
 export function parseChanges(changes: RawChanges): Diff[] {
 
     const propsBefore = changes.before ? Object.keys(changes.before) : [];
     const propsAfter = changes.after ? Object.keys(changes.after) : [];
-    const propsAfterUnknown = changes.after ? Object.keys(changes.after_unknown) : [];
+    const propsAfterUnknown = changes.after_unknown ? Object.keys(changes.after_unknown) : [];
 
     const propsAllObj =  propsBefore.concat(propsAfter).concat(propsAfterUnknown).reduce( (acc:any, property) => {
-        const diff:Diff = {property, old: undefined, new: "", forcesNewResource: ""};
+        const diff:Diff = {property, old: undefined, new: ""};
         acc[property] = diff;
         return acc;
     }, {});
@@ -62,9 +66,14 @@ export function parseChanges(changes: RawChanges): Diff[] {
 
     const props = propsAllArr.reduce((acc, property) => {
 
-        property.old = changes.before ? ( changes.before[property.property] ? changes.before[property.property] : null) : null;
-        property.new = changes.after ? ( changes.after[property.property] ? changes.after[property.property] : null) : null;
-        property.new = changes.after_unknown ? ( property.new ? property.new : ( changes.after_unknown[property.property] ? '<computed>' : property.new ) ) : property.new;
+        property.old = changes.before ? ( changes.before[property.property] !== undefined  ? changes.before[property.property] : undefined) : undefined;
+        property.new = changes.after_unknown ? ( changes.after_unknown[property.property] !== undefined ? "<computed>" : null) : null;
+        property.new = changes.after ? ( changes.after[property.property] !== undefined ? changes.after[property.property] : property.new) : null;
+
+        if (property.property === "kms_key_id") {
+            console.log(property)
+            console.log(changes)
+        }
 
         if (!equal(property.old,property.new)) acc.push(property);
 

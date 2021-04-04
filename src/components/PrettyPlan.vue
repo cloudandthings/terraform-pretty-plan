@@ -1,9 +1,5 @@
 <template>
-    <div class="container">
-      <h1>terraform pretty plan</h1>
-      <p>
-        Some blurb here
-      </p>
+    <div>
       <div id="parsing-error-message" class="hidden">
         That doesn't look like a Terraform plan. Did you copy the entire output
         (without colouring) from the plan command?
@@ -51,18 +47,23 @@
               <span class="id">
                 <span class="id-segment prefix" v-for="prefix in action.id.prefixes" :key="prefix">{{prefix}}</span>
                 <span class="id-segment type">{{action.id.type}}</span>
-                <span class="id-segment name">{{action.id.name}}</span>
+                <span class="id-segment name">
+                  {{action.id.name}}
+                  <span class="id-segment index" v-if="action.id.index" >[{{action.id.index}}]</span>
+                </span>
               </span>
 
               <span class="change-count"> {{action.filteredChanges.length}} changes </span>
             </div>
             <div class="changes" v-if="action.isOpen">
+              <span class="change-count"> {{action.id.address}} </span>
+              
               <table>
                 <tbody>
                   <tr v-for="change in action.filteredChanges" :key="change.property">
                     <td class="property"  v-if="!fancyView.includes('fancyView')">{{change.property}}</td>
-                    <td class="old-value" v-if="!fancyView.includes('fancyView')">{{change.old}}</td>
-                    <td class="new-value" v-if="!fancyView.includes('fancyView')">{{change.new}}</td>
+                    <td class="old-value" v-if="!fancyView.includes('fancyView')"><pre>{{change.old}}</pre></td>
+                    <td class="new-value" v-if="!fancyView.includes('fancyView')"><pre>{{change.new}}</pre></td>
                     <td v-if="fancyView.includes('fancyView')">
                       <b>{{change.property}}</b>
                       <vue-json-compare :oldData="change.old" :newData="change.new">

@@ -2,6 +2,7 @@ export interface RawResource {
     address: string;
     name: string;
     type: string;
+    index: any
 }
 
 export interface RawChanges {
@@ -15,13 +16,14 @@ export interface Diff {
     property: string;
     old?: string;
     new: string;
-    forcesNewResource?: string;
 }
 
 export interface ResourceId {
     name: string;
     type: string;
     prefixes: string[];
+    index: string | null;
+    address: string;
 }
 export interface Warning {
     id: ResourceId;
