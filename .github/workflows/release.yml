@@ -14,7 +14,7 @@ jobs:
         run: |
           npm install
           npm run build
-          zip --junk-paths dist README.md
+          zip -r my-artifact.zip dist
 
       - name: Create Release 📦
         id: create_release
