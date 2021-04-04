@@ -127,7 +127,7 @@ export default Vue.extend({
     }
   },
   mounted() {
-    fetch("pplan.json")
+    fetch("plan.json")
       .then((response) => response.json())
       .then((data) => this.parseRawJson(data))
       .catch((response) => {
