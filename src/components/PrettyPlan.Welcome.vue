@@ -11,7 +11,7 @@
           </p>
           <p class="lineBlurb">
             This will turn your terraform JSON plan into something more. Paste a json plan in the box below and prettify it. 
-            This has not been tested with terraform modules and IAM policy change and can only be used with terraform 0.12.0+.
+            This has not been tested with terraform modules and IAM policy changes and can only be used with terraform 0.12.0+.
             To generate a plan:
           </p>
           <p class="line">$ terraform plan -out=plan.out</p>
