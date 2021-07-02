@@ -4,6 +4,7 @@
     <div id="release-notification" class="hidden"></div>
     <div class="container">
     <PrettyPlan/>
+    
     </div>
     <footer id="branding">
         Source on <a href="https://github.com/cloudandthings/terraform-pretty-plan">GitHub</a><br />

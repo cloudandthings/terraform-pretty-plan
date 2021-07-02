@@ -1,0 +1,20 @@
+{
+    "name" : "pretty-plan",
+    "short_name" : "pretty-plan",
+    "icons" : [
+        {
+            "src" : "./images/icons8-linode-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src" : "./images/icons8-linode-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "/",
+    "display": "standalone",
+    "background": "#000000",
+    "theme_color": "#4DBA87"
+}
